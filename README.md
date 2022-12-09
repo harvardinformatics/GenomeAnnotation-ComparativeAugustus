@@ -27,11 +27,11 @@ startAlign.pl --genome=${genomefasta} --prot=${proteintargetfasta} --CPU=12 --pr
 
 where $genomefasta and $proteintargetfasta are the genome sequences for the species of interest, and the protein fasta from (ideally) closely related species. For a large protein fasta, one can split the fasta file into smaller pieces, run aligngment on those pieces, and combine the alignment files afterwards before proceeding to the next step. The number of CPUs flag should be changed to reflect the available compute resources you have at your disposal.
 
-We run the perl script from outside of the singularity container we use for running Augustus to avoid various path-related errors. This analysis will produce a directory with the name align_gth. Next, we convert the alignment to hits using [Align2hints.sh]() as follows:
+We run the perl script from outside of the singularity container we use for running AUGUSTUS to avoid various path-related errors. This analysis will produce a directory with the name align_gth. Next, we convert the alignment to splice hints. To do this, download the BRAKER [align2hints.pl](https://github.com/Gaius-Augustus/BRAKER/blob/master/scripts/align2hints.pl) script. Then run it as follows:
 ```bash
-sbatch Align2hints.sh
+align2hints.pl --in align_gth/gth.concat.aln --out=prot.hints --prg=gth
 ```
-This script looks for the align_gth directory produced during the alignment step so run it from the same directory where the alignment is located.
+This script looks for the align_gth directory produced during the alignment step so run it from the same directory in which align_gth is located. The file *gth.concat.aln* is the file containing all of the GenomeThreader alignments, i.e. if you ran alignments in parallel on many subsets of the protein fasta, they should be concatenated to produce *gth.concat.aln*. 
 
 
  
